@@ -332,7 +332,7 @@
       transform: none;
     }
 
-    /* Confirmation */
+    /* Confirmation / Polling */
     .confirmation {
       display: none;
       background: var(--green-50);
@@ -367,6 +367,158 @@
     .confirmation .email-highlight {
       font-weight: 600;
       color: var(--blue-700);
+    }
+
+    /* Polling spinner */
+    .polling-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--green-500);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* License Key Card */
+    .license-card {
+      display: none;
+      background: linear-gradient(135deg, var(--green-50), #ecfdf5);
+      border: 2px solid var(--green-500);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .license-card.show {
+      display: block;
+    }
+
+    .license-card .success-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .license-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--green-700);
+      margin-bottom: 4px;
+    }
+
+    .license-card .license-plan {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+
+    .license-key-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: white;
+      border: 2px dashed var(--green-500);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    .license-key-text {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gray-900);
+      letter-spacing: 1px;
+      user-select: all;
+    }
+
+    .license-copy-btn {
+      background: var(--green-600);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .license-copy-btn:hover {
+      background: var(--green-700);
+    }
+
+    .license-copy-btn.copied {
+      background: var(--blue-600);
+    }
+
+    .license-instructions {
+      font-size: 13px;
+      color: var(--gray-600);
+      line-height: 1.6;
+      background: white;
+      border-radius: 8px;
+      padding: 12px 16px;
+      text-align: left;
+    }
+
+    .license-instructions strong {
+      color: var(--gray-800);
+    }
+
+    .license-instructions ol {
+      margin: 4px 0 0 16px;
+      padding: 0;
+    }
+
+    .license-instructions li {
+      margin-bottom: 2px;
+    }
+
+    /* Underpaid Card */
+    .underpaid-card {
+      display: none;
+      background: #fff7ed;
+      border: 2px solid #f97316;
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .underpaid-card.show {
+      display: block;
+    }
+
+    .underpaid-card .warn-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .underpaid-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #c2410c;
+      margin-bottom: 8px;
+    }
+
+    .underpaid-card p {
+      font-size: 14px;
+      color: var(--gray-700);
+    }
+
+    .underpaid-card .amount-diff {
+      font-weight: 700;
+      color: #c2410c;
     }
 
     /* Wait notice */
@@ -494,6 +646,14 @@
       .info-value {
         text-align: left;
       }
+
+      .license-key-text {
+        font-size: 16px;
+      }
+
+      .license-key-box {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -529,7 +689,7 @@
 
     <div class="card-body">
       <!-- QR Code -->
-      <div class="qr-section">
+      <div class="qr-section" id="qrSection">
         <div class="qr-wrapper">
           <img id="qrImage" alt="VietQR" />
         </div>
@@ -537,7 +697,7 @@
       </div>
 
       <!-- Transfer Info -->
-      <div class="transfer-info">
+      <div class="transfer-info" id="transferInfoSection">
         <h3 data-t="transfer_title">Thong tin chuyen khoan</h3>
 
         <div class="info-row">
@@ -547,8 +707,8 @@
 
         <div class="info-row">
           <span class="info-label" data-t="account_label">So TK</span>
-          <span class="info-value" id="accountNumber">19036693579018</span>
-          <button class="copy-btn" onclick="copyText('19036693579018', this)" data-t="copy">Sao chep</button>
+          <span class="info-value" id="accountNumber">67319051997</span>
+          <button class="copy-btn" onclick="copyText('67319051997', this)" data-t="copy">Sao chep</button>
         </div>
 
         <div class="info-row">
@@ -569,7 +729,7 @@
       </div>
 
       <!-- Email -->
-      <div class="email-section">
+      <div class="email-section" id="emailSection">
         <label data-t="email_label">Email nhan license key</label>
         <div class="email-input-wrap">
           <span class="icon">&#9993;&#65039;</span>
@@ -583,17 +743,51 @@
         <span data-t="submit_btn">Toi da chuyen khoan — Gui xac nhan</span>
       </button>
 
-      <!-- Confirmation -->
+      <!-- Confirmation (polling state) -->
       <div class="confirmation" id="confirmation">
-        <div class="icon-check">&#9989;</div>
-        <h3 data-t="confirm_title">Da ghi nhan!</h3>
-        <p><span data-t="confirm_msg">Chung toi dang kiem tra giao dich. License key se duoc gui den</span> <span class="email-highlight" id="confirmEmail"></span> <span data-t="confirm_time">trong 1-5 phut.</span></p>
+        <div class="icon-check">&#9203;</div>
+        <h3><span class="polling-spinner"></span> <span data-t="confirm_title_polling">Dang kiem tra giao dich...</span></h3>
+        <p><span data-t="confirm_msg_polling">He thong dang doi xac nhan tu ngan hang. Vui long doi...</span></p>
+      </div>
+
+      <!-- License Key Card (shown after payment confirmed) -->
+      <div class="license-card" id="licenseCard">
+        <div class="success-icon">&#9989;</div>
+        <h3 data-t="license_title">Thanh toan thanh cong!</h3>
+        <div class="license-plan" id="licensePlanText"></div>
+        <div class="license-key-box">
+          <span class="license-key-text" id="licenseKeyText"></span>
+          <button class="license-copy-btn" id="licenseCopyBtn" onclick="copyLicenseKey()">Copy</button>
+        </div>
+        <div class="license-instructions">
+          <strong data-t="license_howto">Huong dan kich hoat:</strong>
+          <ol>
+            <li data-t="license_step1">Mo extension ShopReply</li>
+            <li data-t="license_step2">Vao Settings (bieu tuong banh rang)</li>
+            <li data-t="license_step3">Dan license key vao o "License Key"</li>
+            <li data-t="license_step4">Nhan "Activate" — Xong!</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Underpaid Card -->
+      <div class="underpaid-card" id="underpaidCard">
+        <div class="warn-icon">&#9888;&#65039;</div>
+        <h3 data-t="underpaid_title">Chua du so tien</h3>
+        <p>
+          <span data-t="underpaid_msg">Ban da chuyen</span>
+          <span class="amount-diff" id="underpaidAmount"></span>
+          <span data-t="underpaid_but"> nhung can chuyen</span>
+          <span class="amount-diff" id="underpaidExpected"></span>.
+          <br/>
+          <span data-t="underpaid_action">Vui long chuyen them phan con thieu voi cung noi dung.</span>
+        </p>
       </div>
 
       <!-- Wait notice -->
-      <div class="wait-notice">
+      <div class="wait-notice" id="waitNotice">
         <span class="wait-icon">&#9203;</span>
-        <span data-t="wait_notice">Sau khi chuyen khoan, he thong se tu dong gui license key qua email trong vong 1-5 phut.</span>
+        <span data-t="wait_notice">Sau khi chuyen khoan, he thong se tu dong xac nhan va hien thi license key ngay tren trang nay.</span>
       </div>
 
       <!-- Divider -->
@@ -615,7 +809,7 @@
 
 <script>
   // ===== Translations =====
-  const T = {
+  var T = {
     vi: {
       page_title: 'Thanh to\u00e1n',
       per_month: '/th\u00e1ng',
@@ -630,16 +824,25 @@
       email_label: '\u2709\uFE0F Email nh\u1eadn license key',
       email_error: 'Vui l\u00f2ng nh\u1eadp email h\u1ee3p l\u1ec7',
       submit_btn: 'T\u00f4i \u0111\u00e3 chuy\u1ec3n kho\u1ea3n \u2014 G\u1eedi x\u00e1c nh\u1eadn',
-      confirm_title: '\u0110\u00e3 ghi nh\u1eadn!',
-      confirm_msg: 'Ch\u00fang t\u00f4i \u0111ang ki\u1ec3m tra giao d\u1ecbch. License key s\u1ebd \u0111\u01b0\u1ee3c g\u1eedi \u0111\u1ebfn',
-      confirm_time: 'trong 1-5 ph\u00fat.',
-      wait_notice: 'Sau khi chuy\u1ec3n kho\u1ea3n, h\u1ec7 th\u1ed1ng s\u1ebd t\u1ef1 \u0111\u1ed9ng g\u1eedi license key qua email trong v\u00f2ng 1-5 ph\u00fat.',
+      confirm_title_polling: '\u0110ang ki\u1ec3m tra giao d\u1ecbch...',
+      confirm_msg_polling: 'H\u1ec7 th\u1ed1ng \u0111ang \u0111\u1ee3i x\u00e1c nh\u1eadn t\u1eeb ng\u00e2n h\u00e0ng. Vui l\u00f2ng \u0111\u1ee3i...',
+      wait_notice: 'Sau khi chuy\u1ec3n kho\u1ea3n, h\u1ec7 th\u1ed1ng s\u1ebd t\u1ef1 \u0111\u1ed9ng x\u00e1c nh\u1eadn v\u00e0 hi\u1ec3n th\u1ecb license key ngay tr\u00ean trang n\u00e0y.',
       divider_or: 'ho\u1eb7c',
       alt_text: 'Ch\u01b0a c\u00f3 t\u00e0i kho\u1ea3n ng\u00e2n h\u00e0ng VN?',
       alt_link: '\u2192 Thanh to\u00e1n b\u1eb1ng Visa/PayPal',
       error_title: 'Link thanh to\u00e1n kh\u00f4ng h\u1ee3p l\u1ec7',
       error_desc: 'Vui l\u00f2ng quay l\u1ea1i extension \u0111\u1ec3 ch\u1ecdn g\u00f3i v\u00e0 thanh to\u00e1n.',
-      copied: '\u0110\u00e3 sao ch\u00e9p!'
+      copied: '\u0110\u00e3 sao ch\u00e9p!',
+      license_title: 'Thanh to\u00e1n th\u00e0nh c\u00f4ng!',
+      license_howto: 'H\u01b0\u1edbng d\u1eabn k\u00edch ho\u1ea1t:',
+      license_step1: 'M\u1edf extension ShopReply',
+      license_step2: 'V\u00e0o Settings (bi\u1ec3u t\u01b0\u1ee3ng b\u00e1nh r\u0103ng)',
+      license_step3: 'D\u00e1n license key v\u00e0o \u00f4 "License Key"',
+      license_step4: 'Nh\u1ea5n "Activate" \u2014 Xong!',
+      underpaid_title: 'Ch\u01b0a \u0111\u1ee7 s\u1ed1 ti\u1ec1n',
+      underpaid_msg: 'B\u1ea1n \u0111\u00e3 chuy\u1ec3n ',
+      underpaid_but: ' nh\u01b0ng c\u1ea7n chuy\u1ec3n ',
+      underpaid_action: 'Vui l\u00f2ng chuy\u1ec3n th\u00eam ph\u1ea7n c\u00f2n thi\u1ebfu v\u1edbi c\u00f9ng n\u1ed9i dung.'
     },
     en: {
       page_title: 'Payment',
@@ -655,20 +858,29 @@
       email_label: '\u2709\uFE0F Email to receive license key',
       email_error: 'Please enter a valid email',
       submit_btn: 'I have transferred \u2014 Send confirmation',
-      confirm_title: 'Noted!',
-      confirm_msg: 'We are verifying your transfer. License key will be sent to',
-      confirm_time: 'within 1-5 minutes.',
-      wait_notice: 'After transferring, the system will automatically send the license key to your email within 1-5 minutes.',
+      confirm_title_polling: 'Checking transaction...',
+      confirm_msg_polling: 'Waiting for bank confirmation. Please wait...',
+      wait_notice: 'After transferring, the system will automatically confirm and show your license key right on this page.',
       divider_or: 'or',
       alt_text: "Don't have a Vietnamese bank account?",
       alt_link: '\u2192 Pay with Visa/PayPal',
       error_title: 'Invalid payment link',
       error_desc: 'Please go back to the extension to select a plan and pay.',
-      copied: 'Copied!'
+      copied: 'Copied!',
+      license_title: 'Payment successful!',
+      license_howto: 'How to activate:',
+      license_step1: 'Open ShopReply extension',
+      license_step2: 'Go to Settings (gear icon)',
+      license_step3: 'Paste the license key into "License Key" field',
+      license_step4: 'Click "Activate" \u2014 Done!',
+      underpaid_title: 'Insufficient amount',
+      underpaid_msg: 'You transferred ',
+      underpaid_but: ' but the required amount is ',
+      underpaid_action: 'Please transfer the remaining amount with the same message.'
     }
   };
 
-  let currentLang = 'vi';
+  var currentLang = 'vi';
 
   function setLang(lang) {
     currentLang = lang;
@@ -685,8 +897,9 @@
 
   // ===== Config =====
   var BANK_CODE = 'TPB';
-  var ACCOUNT_NUMBER = '19036693579018';
+  var ACCOUNT_NUMBER = '67319051997';
   var ACCOUNT_NAME = 'PHAM VAN SUNG';
+  var WORKER_URL = 'https://shopreply-payment.nhamingroup.workers.dev';
 
   // ===== URL Params =====
   var params = new URLSearchParams(window.location.search);
@@ -751,7 +964,6 @@
   // ===== Copy =====
   function copyText(text, btn) {
     navigator.clipboard.writeText(text).then(function() {
-      var original = btn.textContent;
       btn.textContent = T[currentLang].copied;
       btn.classList.add('copied');
       setTimeout(function() {
@@ -768,7 +980,6 @@
       ta.select();
       document.execCommand('copy');
       document.body.removeChild(ta);
-      var original = btn.textContent;
       btn.textContent = T[currentLang].copied;
       btn.classList.add('copied');
       setTimeout(function() {
@@ -776,6 +987,97 @@
         btn.classList.remove('copied');
       }, 2000);
     });
+  }
+
+  function copyLicenseKey() {
+    var keyText = document.getElementById('licenseKeyText').textContent;
+    var btn = document.getElementById('licenseCopyBtn');
+    navigator.clipboard.writeText(keyText).then(function() {
+      btn.textContent = T[currentLang].copied;
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    }).catch(function() {
+      var ta = document.createElement('textarea');
+      ta.value = keyText;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.textContent = T[currentLang].copied;
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  // ===== Polling =====
+  var pollingInterval = null;
+  var pollingTimeout = null;
+
+  function pollOrderStatus(orderCode) {
+    pollingInterval = setInterval(function() {
+      fetch(WORKER_URL + '/api/check-order?code=' + encodeURIComponent(orderCode))
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data.status === 'paid') {
+            clearInterval(pollingInterval);
+            clearTimeout(pollingTimeout);
+            showLicenseKey(data.licenseKey, data.plan);
+          } else if (data.status === 'underpaid') {
+            clearInterval(pollingInterval);
+            clearTimeout(pollingTimeout);
+            showUnderpaid(data.paid, data.expected);
+          }
+        })
+        .catch(function() {
+          // Network error — keep polling silently
+        });
+    }, 5000);
+
+    // Stop polling after 30 minutes
+    pollingTimeout = setTimeout(function() {
+      clearInterval(pollingInterval);
+    }, 30 * 60 * 1000);
+  }
+
+  function showLicenseKey(licenseKey, plan) {
+    // Hide QR, transfer info, email, submit, confirmation polling, wait notice
+    document.getElementById('qrSection').style.display = 'none';
+    document.getElementById('transferInfoSection').style.display = 'none';
+    document.getElementById('emailSection').style.display = 'none';
+    document.getElementById('submitBtn').style.display = 'none';
+    document.getElementById('confirmation').classList.remove('show');
+    document.getElementById('waitNotice').style.display = 'none';
+
+    // Show license card
+    var planLabel = plan || window._plan || '';
+    document.getElementById('licensePlanText').textContent = 'Plan: ' + planLabel;
+    document.getElementById('licenseKeyText').textContent = licenseKey;
+    document.getElementById('licenseCard').classList.add('show');
+
+    // Scroll to license card
+    document.getElementById('licenseCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function showUnderpaid(paid, expected) {
+    // Hide confirmation polling
+    document.getElementById('confirmation').classList.remove('show');
+
+    // Show underpaid card
+    document.getElementById('underpaidAmount').textContent = formatAmount(paid);
+    document.getElementById('underpaidExpected').textContent = formatAmount(expected);
+    document.getElementById('underpaidCard').classList.add('show');
+
+    // Re-enable submit button so user can try again after topping up
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').innerHTML = '<span>' + T[currentLang].submit_btn + '</span>';
   }
 
   // ===== Submit =====
@@ -811,11 +1113,18 @@
     orders.push(order);
     localStorage.setItem('shopreply_orders', JSON.stringify(orders));
 
-    // Show confirmation
-    document.getElementById('confirmEmail').textContent = email;
+    // Show confirmation (polling state)
     document.getElementById('confirmation').classList.add('show');
     document.getElementById('submitBtn').disabled = true;
-    document.getElementById('submitBtn').innerHTML = '<span>\u2713 ' + (currentLang === 'vi' ? '\u0110\u00e3 g\u1eedi x\u00e1c nh\u1eadn' : 'Confirmation sent') + '</span>';
+    document.getElementById('submitBtn').innerHTML = '<span class="polling-spinner"></span> <span>' + (currentLang === 'vi' ? '\u0110ang ch\u1edd x\u00e1c nh\u1eadn...' : 'Waiting for confirmation...') + '</span>';
+
+    // Hide underpaid card if showing from previous attempt
+    document.getElementById('underpaidCard').classList.remove('show');
+
+    // Start polling the Worker API
+    if (pollingInterval) clearInterval(pollingInterval);
+    if (pollingTimeout) clearTimeout(pollingTimeout);
+    pollOrderStatus(window._orderCode);
   }
 
   // Clear email error on input
