@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopReply — Admin Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue-50: #eff6ff; --blue-100: #dbeafe; --blue-200: #bfdbfe;
+      --blue-500: #3b82f6; --blue-600: #2563eb; --blue-700: #1d4ed8;
+      --purple-50: #f5f3ff; --purple-600: #7c3aed;
+      --green-50: #f0fdf4; --green-500: #22c55e; --green-600: #16a34a; --green-700: #15803d;
+      --orange-50: #fff7ed; --orange-500: #f97316;
+      --red-50: #fef2f2; --red-500: #ef4444;
+      --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb;
+      --gray-400: #9ca3af; --gray-500: #6b7280; --gray-600: #4b5563;
+      --gray-700: #374151; --gray-800: #1f2937; --gray-900: #111827;
+      --radius: 12px;
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--gray-800); background: linear-gradient(135deg, var(--gray-50), var(--blue-50));
+      line-height: 1.6; font-size: 16px; min-height: 100vh; padding: 20px;
+    }
+    .container { max-width: 800px; margin: 0 auto; }
+    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .logo { font-size: 20px; font-weight: 700; color: var(--gray-800); }
+    .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow-lg); overflow: hidden; margin-bottom: 20px; }
+    .card-body { padding: 24px; }
+
+    /* Login */
+    .login-card { max-width: 400px; margin: 80px auto; }
+    .login-card h2 { font-size: 18px; text-align: center; margin-bottom: 16px; color: var(--gray-700); }
+    .form-input { width: 100%; padding: 12px; border: 2px solid var(--gray-200); border-radius: var(--radius); font-size: 15px; outline: none; }
+    .form-input:focus { border-color: var(--blue-500); }
+    .btn { width: 100%; padding: 14px; background: var(--gray-800); color: white; border: none; border-radius: var(--radius); font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 12px; }
+    .btn:hover { background: var(--gray-900); }
+
+    /* Dashboard */
+    #adminDashboard { display: none; }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+    .stat-box { background: white; border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 20px; text-align: center; }
+    .stat-box .val { font-size: 28px; font-weight: 700; }
+    .stat-box .lbl { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+    .stat-box.blue .val { color: var(--blue-700); }
+    .stat-box.orange .val { color: #c2410c; }
+    .stat-box.green .val { color: var(--green-700); }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--gray-200); color: var(--gray-500); font-size: 12px; text-transform: uppercase; white-space: nowrap; }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+    .badge-pending { background: var(--orange-50); color: #c2410c; }
+    .badge-ok { background: var(--green-50); color: var(--green-700); }
+    .pay-btn { background: var(--green-600); color: white; border: none; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .pay-btn:hover { background: var(--green-700); }
+    .pay-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .refresh-btn { background: var(--blue-50); border: 1px solid var(--blue-200); color: var(--blue-600); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .refresh-btn:hover { background: var(--blue-100); }
+    .empty { text-align: center; color: var(--gray-400); padding: 40px; }
+    .msg { padding: 12px; border-radius: var(--radius); font-size: 14px; margin-bottom: 16px; display: none; }
+    .msg.error { display: block; background: var(--red-50); border: 1px solid var(--red-500); color: #991b1b; }
+    .msg.success { display: block; background: var(--green-50); border: 1px solid var(--green-500); color: var(--green-700); }
+    @media (max-width: 600px) {
+      .stats-row { grid-template-columns: 1fr; }
+      body { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Login -->
+  <div id="loginCard" class="login-card card">
+    <div class="card-body">
+      <h2>Admin Dashboard</h2>
+      <div id="loginMsg" class="msg"></div>
+      <input type="password" class="form-input" id="secretInput" placeholder="Admin secret key" onkeydown="if(event.key==='Enter')doLogin()" />
+      <button class="btn" onclick="doLogin()">Login</button>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="adminDashboard">
+    <div class="header">
+      <div class="logo">Admin — Affiliate</div>
+      <button class="refresh-btn" onclick="loadData()">Refresh</button>
+    </div>
+
+    <div id="dashMsg" class="msg"></div>
+
+    <div class="stats-row">
+      <div class="stat-box blue">
+        <div class="val" id="totalAffiliates">0</div>
+        <div class="lbl">Affiliates</div>
+      </div>
+      <div class="stat-box orange">
+        <div class="val" id="totalPending">0d</div>
+        <div class="lbl">Pending</div>
+      </div>
+      <div class="stat-box green">
+        <div class="val" id="totalPaid">0d</div>
+        <div class="lbl">Da tra</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ma REF</th>
+                <th>Ten</th>
+                <th>STK</th>
+                <th>NH</th>
+                <th>Luot</th>
+                <th>Pending</th>
+                <th>Da tra</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr><td colspan="8" class="empty">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var WORKER_URL = 'https://shopreply-payment.nhamingroup.workers.dev';
+  var adminSecret = '';
+
+  function formatMoney(n) {
+    return n.toLocaleString('vi-VN') + '\u0111';
+  }
+
+  function doLogin() {
+    var secret = document.getElementById('secretInput').value.trim();
+    if (!secret) return;
+    adminSecret = secret;
+    sessionStorage.setItem('admin_secret', secret);
+    document.getElementById('loginCard').style.display = 'none';
+    document.getElementById('adminDashboard').style.display = 'block';
+    loadData();
+  }
+
+  function loadData() {
+    var msg = document.getElementById('dashMsg');
+    msg.className = 'msg';
+
+    fetch(WORKER_URL + '/api/affiliate/list', {
+      headers: { 'Authorization': 'Bearer ' + adminSecret }
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (!data.success) {
+        if (data.error === 'Unauthorized') {
+          msg.textContent = 'Sai mat khau. Vui long reload va thu lai.';
+          msg.className = 'msg error';
+          sessionStorage.removeItem('admin_secret');
+          return;
+        }
+        msg.textContent = data.error || 'Error';
+        msg.className = 'msg error';
+        return;
+      }
+      renderData(data.affiliates);
+    })
+    .catch(function() {
+      msg.textContent = 'Loi ket noi';
+      msg.className = 'msg error';
+    });
+  }
+
+  function renderData(affiliates) {
+    var totalPending = 0, totalPaid = 0;
+    affiliates.forEach(function(a) {
+      totalPending += a.pendingCommission;
+      totalPaid += a.paidCommission;
+    });
+
+    document.getElementById('totalAffiliates').textContent = affiliates.length;
+    document.getElementById('totalPending').textContent = formatMoney(totalPending);
+    document.getElementById('totalPaid').textContent = formatMoney(totalPaid);
+
+    var tbody = document.getElementById('tableBody');
+    if (affiliates.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="empty">Chua co affiliate nao</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = '';
+    affiliates.forEach(function(a) {
+      var tr = document.createElement('tr');
+      var payable = a.pendingCommission >= 200000;
+      var payBtnHtml = payable
+        ? '<button class="pay-btn" onclick="markPaid(\'' + a.refCode + '\', this)">Da tra</button>'
+        : (a.pendingCommission > 0 ? '<span class="badge badge-pending">< 200K</span>' : '<span class="badge badge-ok">OK</span>');
+      tr.innerHTML = '<td><strong>' + a.refCode + '</strong></td>'
+        + '<td>' + a.name + '</td>'
+        + '<td>' + a.bankAccount + '</td>'
+        + '<td>' + a.bankName + '</td>'
+        + '<td>' + a.totalReferrals + '</td>'
+        + '<td>' + formatMoney(a.pendingCommission) + '</td>'
+        + '<td>' + formatMoney(a.paidCommission) + '</td>'
+        + '<td>' + payBtnHtml + '</td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  function markPaid(refCode, btn) {
+    if (!confirm('Xac nhan da chuyen tien cho ' + refCode + '?')) return;
+    btn.disabled = true;
+    btn.textContent = '...';
+
+    fetch(WORKER_URL + '/api/affiliate/mark-paid', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + adminSecret
+      },
+      body: JSON.stringify({ refCode: refCode })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.success) {
+        var msg = document.getElementById('dashMsg');
+        msg.textContent = 'Da danh dau ' + refCode + ' thanh toan (' + data.markedCount + ' luot)';
+        msg.className = 'msg success';
+        loadData();
+      }
+    });
+  }
+
+  // Auto-login from session
+  (function() {
+    var saved = sessionStorage.getItem('admin_secret');
+    if (saved) {
+      adminSecret = saved;
+      document.getElementById('loginCard').style.display = 'none';
+      document.getElementById('adminDashboard').style.display = 'block';
+      loadData();
+    }
+  })();
+</script>
+
+</body>
+</html>

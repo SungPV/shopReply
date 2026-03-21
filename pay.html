@@ -905,6 +905,7 @@
   var params = new URLSearchParams(window.location.search);
   var plan = params.get('plan');
   var amount = parseInt(params.get('amount'), 10);
+  var refCode = params.get('ref') || null;
 
   if (!plan || !amount || isNaN(amount)) {
     document.getElementById('errorPage').style.display = '';
@@ -959,6 +960,15 @@
     window._plan = planUpper;
     window._amount = amount;
     window._transferContent = transferContent;
+
+    // Track affiliate referral if ref code present
+    if (refCode) {
+      fetch(WORKER_URL + '/api/affiliate/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderCode: orderCode, refCode: refCode })
+      }).catch(function() {}); // Silent fail — don't block payment
+    }
   }
 
   // ===== Copy =====
