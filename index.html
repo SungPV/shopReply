@@ -896,10 +896,10 @@
         <h3 style="margin-top:0;" data-i18n="sec_s3_m4_title">Cách 4: Không cần import — bot tự học</h3>
         <p data-i18n="sec_s3_m4_desc">Nếu bạn không có data sẵn:</p>
         <ol>
-          <li data-i18n="sec_s3_m4_1">Để bot chạy ở chế độ <strong>"Suggest only"</strong> (gợi ý, không tự động gửi)</li>
-          <li data-i18n="sec_s3_m4_2">Mỗi khi khách hỏi, bạn tự viết câu trả lời, bot tự lưu vào database</li>
-          <li data-i18n="sec_s3_m4_3">Lần sau gặp câu tương tự, bot tự động trả lời luôn</li>
-          <li data-i18n="sec_s3_m4_4">Sau 1-2 tuần, bot đã học đủ để tự động 80-90% câu hỏi</li>
+          <li data-i18n="sec_s3_m4_1">Mỗi khi khách hỏi, bạn tự viết câu trả lời — bot sẽ lưu vào database ở trạng thái <strong>chưa duyệt</strong> (nguồn <code>auto_scan</code>)</li>
+          <li data-i18n="sec_s3_m4_2">Vào <strong>Bộ câu hỏi</strong> → rà soát các Q&A chưa duyệt → bấm <strong>Duyệt</strong> những câu đúng ý</li>
+          <li data-i18n="sec_s3_m4_3">Chỉ Q&A <strong>đã duyệt</strong> mới được bot dùng để tự động trả lời (tránh bot học sai, trả lời bậy)</li>
+          <li data-i18n="sec_s3_m4_4">Sau 1-2 tuần tích lũy, bot đã đủ dữ liệu để tự động 80-90% câu hỏi</li>
         </ol>
       </div>
     </section>
@@ -917,17 +917,18 @@
           <li data-i18n="sec_s4_2">Mở <strong>Facebook Messages</strong> (<code>facebook.com/messages</code>) hoặc <strong>Zalo Web</strong> (<code>chat.zalo.me</code>)</li>
           <li data-i18n="sec_s4_3">Khi có tin nhắn khách hàng:
             <ul>
-              <li data-i18n="sec_s4_3a"><strong>Câu đã có sẵn trong DB</strong> (độ chính xác &ge; 85%) — ShopReply <strong>tự động trả lời luôn</strong></li>
-              <li data-i18n="sec_s4_3b"><strong>Câu tương tự</strong> (50-84%) — Hiện bảng đề xuất, bạn chọn/sửa rồi gửi</li>
-              <li data-i18n="sec_s4_3c"><strong>Câu hoàn toàn mới</strong> — Hiện gợi ý từ AI (nếu có Ollama), bạn tự viết rồi gửi</li>
+              <li data-i18n="sec_s4_3a"><strong>Câu đã có sẵn trong DB đã duyệt</strong> (độ khớp &ge; 80%) — ShopReply <strong>tự động trả lời</strong> (chỉ áp dụng gói <strong>Pro</strong>)</li>
+              <li data-i18n="sec_s4_3b"><strong>Câu tương tự</strong> (65-79%) — Hiện bảng đề xuất, bạn chọn/sửa rồi gửi</li>
+              <li data-i18n="sec_s4_3c"><strong>Câu hoàn toàn mới</strong> — Hiện gợi ý từ AI (nếu có Ollama), bạn tự viết/chỉnh rồi gửi. AI <strong>không bao giờ tự gửi</strong> — tránh bịa sai</li>
+              <li data-i18n="sec_s4_3d"><strong>Cảnh báo</strong> — Nếu khách hỏi không liên quan shop hoặc yêu cầu gặp người thật, ShopReply hiện cảnh báo để bạn xử lý trực tiếp</li>
             </ul>
           </li>
-          <li data-i18n="sec_s4_4">Mỗi lần bạn trả lời câu mới, ShopReply tự động học, lần sau gặp câu tương tự sẽ tự trả lời</li>
+          <li data-i18n="sec_s4_4">Mỗi lần bạn trả lời câu mới, ShopReply tự lưu vào DB (chưa duyệt). Bạn vào <strong>Bộ câu hỏi</strong> bấm <strong>Duyệt</strong> để kích hoạt auto-reply cho câu đó</li>
         </ol>
       </div>
 
       <div class="tip tip-green" data-i18n="sec_s4_tip">
-        <strong>Càng dùng nhiều, bot càng thông minh.</strong> Sau 1-2 tuần, bot có thể tự động trả lời 80-90% câu hỏi.
+        <strong>Càng duyệt Q&A nhiều, bot càng thông minh.</strong> Sau 1-2 tuần, bot có thể tự động trả lời 80-90% câu hỏi thường gặp.
       </div>
 
       <figure class="screenshot">
@@ -942,7 +943,7 @@
       <p data-i18n="sec_settings_desc">Mở cài đặt ShopReply để điều chỉnh ngưỡng tự động trả lời, giọng văn, và các nền tảng:</p>
       <figure class="screenshot">
         <img src="images/settings.png" alt="Settings - Cài đặt ShopReply">
-        <figcaption data-i18n="sec_settings_cap">Tab Settings — điều chỉnh ngưỡng auto-reply (0.85), suggest (0.50), giọng văn, bật/tắt FB/Zalo</figcaption>
+        <figcaption data-i18n="sec_settings_cap">Tab Settings — điều chỉnh ngưỡng auto-reply (mặc định 0.80), suggest (0.65), giọng văn, bật/tắt FB/Zalo</figcaption>
       </figure>
     </section>
 
