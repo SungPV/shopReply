@@ -704,6 +704,7 @@
       <li><a href="#auto-start" data-i18n="toc_autostart">Khởi động cùng Windows</a></li>
       <li><a href="#faq" data-i18n="toc_faq">Câu hỏi thường gặp</a></li>
       <li><a href="#lien-he" data-i18n="toc_contact">Liên hệ hỗ trợ</a></li>
+      <li><a href="#gioi-thieu-ban-be" data-i18n="toc_affiliate">Giới thiệu bạn bè</a></li>
       <li><a href="#ung-ho" data-i18n="toc_donate">Ủng hộ tác giả</a></li>
     </ul>
   </nav>
@@ -817,7 +818,7 @@
 
       <div class="card">
         <ol>
-          <li data-i18n="sec_s2_1">Mở Chrome Web Store (link sẽ được cung cấp sau)</li>
+          <li data-i18n="sec_s2_1">Mở <a href="https://chromewebstore.google.com/search/ShopReply%20%E2%80%94%20Auto%20Reply%20AI%20for%20Facebook%20Messenger%20%26%20Zalo" target="_blank" style="color:#2563eb;font-weight:600;">ShopReply trên Chrome Web Store</a></li>
           <li data-i18n="sec_s2_2">Nhấn <strong>"Thêm vào Chrome"</strong> (Add to Chrome)</li>
           <li data-i18n="sec_s2_3">Nhấn <strong>"Thêm tiện ích mở rộng"</strong> (Add extension)</li>
           <li data-i18n="sec_s2_4">Ghim biểu tượng ShopReply vào thanh công cụ:
@@ -1024,6 +1025,30 @@
       </div>
     </section>
 
+    <!-- Giới thiệu bạn bè (Affiliate) -->
+    <section class="section" id="gioi-thieu-ban-be">
+      <h2 data-i18n="sec_affiliate_title">Giới thiệu bạn bè — kiếm 50.000đ/lượt</h2>
+      <p data-i18n="sec_affiliate_desc" style="margin-bottom:16px;">
+        Nếu bạn thấy ShopReply hữu ích, hãy chia sẻ với bạn bè kinh doanh online — bạn nhận <strong>50.000đ hoa hồng</strong> mỗi lượt thanh toán thành công.
+      </p>
+      <div class="card">
+        <h3 style="font-size:16px;margin-bottom:10px;color:var(--gray-700);" data-i18n="sec_affiliate_how_title">Cách hoạt động</h3>
+        <ol>
+          <li data-i18n="sec_affiliate_1">Vào trang <a href="affiliate.html" target="_blank">Chương trình giới thiệu</a> và đăng ký với họ tên + số tài khoản ngân hàng</li>
+          <li data-i18n="sec_affiliate_2">Nhận <strong>mã giới thiệu</strong> dạng <code>REF-XXXXXX</code></li>
+          <li data-i18n="sec_affiliate_3">Chia sẻ link có chứa mã giới thiệu cho bạn bè (ví dụ: <code>nhamingroup.github.io/shopReply/?ref=REF-XXXXXX</code>)</li>
+          <li data-i18n="sec_affiliate_4">Khi bạn bè mua ShopReply qua link đó, bạn nhận <strong>50.000đ</strong></li>
+          <li data-i18n="sec_affiliate_5">Hoa hồng được thanh toán <strong>mỗi Chủ Nhật</strong> (tối thiểu 200.000đ — chuyển khoản về tài khoản đã đăng ký)</li>
+        </ol>
+        <p data-i18n="sec_affiliate_note" style="margin-top:12px;font-size:13px;color:var(--gray-500);">
+          Đã có mã rồi? Vào <a href="affiliate.html" target="_blank">trang giới thiệu</a> > nhập mã <code>REF-XXXXXX</code> để xem dashboard thống kê.
+        </p>
+        <div style="margin-top:16px;text-align:center;">
+          <a href="affiliate.html" target="_blank" style="display:inline-block;background:var(--blue-600);color:#fff;padding:12px 28px;border-radius:10px;font-weight:600;text-decoration:none;" data-i18n="sec_affiliate_cta">Đăng ký Affiliate ngay →</a>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="ung-ho">
       <h2 data-i18n="sec_donate_title">Ủng hộ tác giả</h2>
       <div class="card" style="text-align:center;">
@@ -1090,6 +1115,7 @@
       toc_autostart: 'Start with Windows',
       toc_faq: 'FAQ',
       toc_contact: 'Contact support',
+      toc_affiliate: 'Refer a friend',
       // Hero
       hero_title: 'ShopReply Setup Guide',
       hero_desc: 'Auto-reply software for shop owners on Facebook & Zalo.<br>All data is processed <strong>on your computer</strong> — nothing is sent to the cloud.',
@@ -1130,7 +1156,7 @@
       sec_s1_verify_3: 'The browser will open showing <code>"status": "ok"</code> — you\'re all set!',
       // Step 2
       sec_s2_title: 'Install Chrome Extension',
-      sec_s2_1: 'Open Chrome Web Store (link will be provided later)',
+      sec_s2_1: 'Open <a href="https://chromewebstore.google.com/search/ShopReply%20%E2%80%94%20Auto%20Reply%20AI%20for%20Facebook%20Messenger%20%26%20Zalo" target="_blank" style="color:#2563eb;font-weight:600;">ShopReply on the Chrome Web Store</a>',
       sec_s2_2: 'Click <strong>"Add to Chrome"</strong>',
       sec_s2_3: 'Click <strong>"Add extension"</strong>',
       sec_s2_4: 'Pin ShopReply to the toolbar:<ul><li data-i18n="sec_s2_4a">Click the puzzle icon (extensions) in the top-right of Chrome</li><li data-i18n="sec_s2_4b">Find <strong>ShopReply</strong> > click the pin icon</li></ul>',
@@ -1209,6 +1235,17 @@
       sec_contact_desc: 'If you encounter any issues or need help, contact us via:',
       sec_contact_zalo: '<strong>Zalo:</strong> (coming soon)',
       sec_contact_fb: '<strong>Facebook:</strong> (coming soon)',
+      // Affiliate
+      sec_affiliate_title: 'Refer a friend — earn 50,000đ per sale',
+      sec_affiliate_desc: 'If you find ShopReply useful, share it with friends running online shops — you earn <strong>50,000đ commission</strong> per successful payment.',
+      sec_affiliate_how_title: 'How it works',
+      sec_affiliate_1: 'Visit the <a href="affiliate.html" target="_blank">Referral program</a> page and register with your name + bank account',
+      sec_affiliate_2: 'Receive a <strong>referral code</strong> in the format <code>REF-XXXXXX</code>',
+      sec_affiliate_3: 'Share the link containing your referral code with friends (e.g., <code>nhamingroup.github.io/shopReply/?ref=REF-XXXXXX</code>)',
+      sec_affiliate_4: 'When friends buy ShopReply via that link, you earn <strong>50,000đ</strong>',
+      sec_affiliate_5: 'Commissions are paid out <strong>every Sunday</strong> (minimum 200,000đ — transferred to your registered bank account)',
+      sec_affiliate_note: 'Already have a code? Visit the <a href="affiliate.html" target="_blank">referral page</a> > enter your <code>REF-XXXXXX</code> code to view the stats dashboard.',
+      sec_affiliate_cta: 'Register as Affiliate →',
       // Donate
       toc_donate: 'Support the author',
       sec_donate_title: 'Support the Author',
